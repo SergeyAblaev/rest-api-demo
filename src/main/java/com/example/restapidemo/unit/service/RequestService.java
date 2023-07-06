@@ -26,12 +26,6 @@ public class RequestService {
         saveRequest(remoteAddr, now);
         return checkAllowedrequestResult(remoteAddr, now);
     }
-//        RequestRepository.save()// or Map - где макс элементов = N штук (+перестройка при смене настройки)
-        //  количество запросов с одного IP адреса на этот метод в размере N штук в X минут.
-
-        //- Написать функционал, который будет ограничивать количество запросов с одного IP адреса на этот метод в размере N штук в X минут.
-        // Если количество запросов больше, то должен возвращаться 502 код ошибки, до тех пор, пока количество обращений за заданный интервал не станет ниже N.
-//    }
 
     private boolean checkAllowedrequestResult(String remoteAddr, LocalDateTime now) {
         LocalDateTime minusMinutes = now.minusMinutes(minutesValue);
@@ -45,10 +39,7 @@ public class RequestService {
                 countValue++;
             }
         }
-        if (countValue > maxCountValue) {
-            return false;
-        }
-            return true;
+        return countValue <= maxCountValue;
     }
 
     private void saveRequest(String remoteAddr, LocalDateTime dateTime) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class RestrictionApiImpl implements RestrictionApi {
 
+    public static final String TOO_MACH_REQUESTS = "Too mach requests!";
     RequestService requestService;
 
 
@@ -23,7 +24,7 @@ public class RestrictionApiImpl implements RestrictionApi {
         if (requestService.saveAndCheckAllowedRequest(remoteAddr)) {
             response = ResponseEntity.ok().build();
         } else {
-            response = ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Too mach requests!");
+            response = ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(TOO_MACH_REQUESTS);
         }
         return response;
     }
