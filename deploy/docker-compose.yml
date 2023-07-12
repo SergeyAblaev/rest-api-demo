@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+
+  ################### APP DB #######################
+
+  app-db:
+    image: postgres:14.7-alpine3.17
+    container_name: rest-api-demo-db
+    ports:
+      - "5434:5432"
+    environment:
+      - "POSTGRES_PASSWORD=postgres"
+    volumes:
+      - "./initdb:/docker-entrypoint-initdb.d:ro"
