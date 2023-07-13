@@ -14,12 +14,11 @@ import static java.time.ZoneId.systemDefault;
 
 @Service
 public class RequestService {
-    private static final Map<String, LinkedList<Long>> STORE = new ConcurrentHashMap<>();
+    private static final Map<String, LinkedList<Long>> PROTECT_COUNTER_STORE = new ConcurrentHashMap<>();
     @Value("${lifebit.minutesValue}")
     private long minutesValue;
     @Value("${lifebit.maxCountValue}")
     private long maxCountValue;
-
 
     public boolean saveAndCheckAllowedRequest(String remoteAddr) {
         LocalDateTime now = now();
@@ -30,7 +29,7 @@ public class RequestService {
     private boolean checkAllowedrequestResult(String remoteAddr, LocalDateTime now) {
         LocalDateTime minusMinutes = now.minusMinutes(minutesValue);
         Long longMinutes = minusMinutes.atZone(systemDefault()).toEpochSecond();
-        LinkedList<Long> list = STORE.get(remoteAddr);
+        LinkedList<Long> list = PROTECT_COUNTER_STORE.get(remoteAddr);
         ListIterator<Long> listIterator = list.listIterator();
         int countValue = 0;
         while (listIterator.hasNext()){
@@ -43,13 +42,13 @@ public class RequestService {
     }
 
     private void saveRequest(String remoteAddr, LocalDateTime dateTime) {
-        LinkedList<Long> list = STORE.get(remoteAddr);
+        LinkedList<Long> list = PROTECT_COUNTER_STORE.get(remoteAddr);
         if (list == null) {
             list = new LinkedList<>();
         }
         long epoch = dateTime.atZone(systemDefault()).toEpochSecond();
         list.add(epoch);
-    STORE.put(remoteAddr, list);
+    PROTECT_COUNTER_STORE.put(remoteAddr, list);
     }
 
 }

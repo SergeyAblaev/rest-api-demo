@@ -8,5 +8,5 @@ if [[ -z `which docker-compose` ]]; then
 fi
 
 cd deploy
-docker-compose up -d rest-api-demo-db
+docker-compose up -d app-db
 echo -e "\033[0;31mDONE\033[0m"
