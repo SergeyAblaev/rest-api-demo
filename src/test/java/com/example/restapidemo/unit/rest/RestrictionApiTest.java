@@ -10,7 +10,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class restrictionApiTest {
+class RestrictionApiTest {
     private static final long MINUTES_VALUE =1;
     private static final long MAX_COUNT_VALUE =3;
     public static final String REMOTE_ADDR1 = "192.168.1.1";
