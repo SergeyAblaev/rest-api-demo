@@ -29,26 +29,27 @@ public class RequestService {
     private boolean checkAllowedrequestResult(String remoteAddr, LocalDateTime now) {
         LocalDateTime minusMinutes = now.minusMinutes(minutesValue);
         Long longMinutes = minusMinutes.atZone(systemDefault()).toEpochSecond();
-        LinkedList<Long> list = PROTECT_COUNTER_STORE.get(remoteAddr);
-        ListIterator<Long> listIterator = list.listIterator();
+        final LinkedList<Long> clonedListForCounting = (LinkedList<Long>) PROTECT_COUNTER_STORE.get(remoteAddr).clone();
+        ListIterator<Long> listIterator =  clonedListForCounting.listIterator();
         int countValue = 0;
-        while (listIterator.hasNext()){
+        while (listIterator.hasNext()) {
             Long next = listIterator.next();
-            if (next>longMinutes){
+            if (next > longMinutes) {
                 countValue++;
+            } else {
+                break;
             }
         }
         return countValue <= maxCountValue;
     }
 
     private void saveRequest(String remoteAddr, LocalDateTime dateTime) {
-        LinkedList<Long> list = PROTECT_COUNTER_STORE.get(remoteAddr);
-        if (list == null) {
-            list = new LinkedList<>();
-        }
         long epoch = dateTime.atZone(systemDefault()).toEpochSecond();
-        list.add(epoch);
-    PROTECT_COUNTER_STORE.put(remoteAddr, list);
+        synchronized (this) {
+            LinkedList<Long> list = PROTECT_COUNTER_STORE.getOrDefault(remoteAddr, new LinkedList<>());
+            list.add(epoch);
+            PROTECT_COUNTER_STORE.put(remoteAddr, list);
+        }
     }
 
 }
