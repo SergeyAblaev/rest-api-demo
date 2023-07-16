@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 --changeset Sergei:1
-CREATE TABLE IF NOT EXISTS TEST_TABLE
+CREATE TABLE IF NOT EXISTS STORE_DATA
 (
     ID                   bigint primary key,
     STATUS                     varchar,
@@ -9,7 +9,11 @@ CREATE TABLE IF NOT EXISTS TEST_TABLE
     LAST_CHANGE_TIMESTAMP      timestamp
 );
 
-CREATE SEQUENCE IF NOT EXISTS test_table_id_seq ;
+CREATE SEQUENCE IF NOT EXISTS store_data_id_seq ;
 
---rollback drop table IF EXIST TEST_TABLE;
---rollback drop sequence if exists test_table_id_seq;
+INSERT INTO STORE_DATA (ID, STATUS)
+VALUES (nextval('store_data_id_seq'), 'STATUS1'),
+       (nextval('store_data_id_seq'), 'STATUS2'),
+       (nextval('store_data_id_seq'), 'STATUS3'),
+       (nextval('store_data_id_seq'), 'STATUS4'),
+       (nextval('store_data_id_seq'), 'STATUS5');

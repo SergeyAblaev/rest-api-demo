@@ -36,8 +36,6 @@ public class RequestService {
             Long next = listIterator.next();
             if (next > longMinutes) {
                 countValue++;
-            } else {
-                break;
             }
         }
         return countValue <= maxCountValue;
